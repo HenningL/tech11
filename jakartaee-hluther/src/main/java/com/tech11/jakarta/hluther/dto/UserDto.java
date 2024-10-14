@@ -19,7 +19,7 @@ public class UserDto {
 	private String password;
 
 	public UserDto() {
-		// TODO Auto-generated constructor stub
+		//needed for reflection
 	}
 	
 	public UserDto(Long id,String firstname, String lastname, String email, LocalDate birthday, String password) {

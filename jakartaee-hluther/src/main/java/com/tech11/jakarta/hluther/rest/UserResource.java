@@ -1,6 +1,7 @@
 package com.tech11.jakarta.hluther.rest;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.tech11.jakarta.hluther.dto.UserDto;
@@ -9,51 +10,78 @@ import com.tech11.jakarta.hluther.repository.UserRepository;
 
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.InternalServerErrorException;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 @Path("user")
 public class UserResource {
-	
-	 @Inject
-	 private UserRepository userRepository;
 
+	@Inject
+	private UserRepository userRepository;
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("{id}")
-	public UserDto get(@PathParam("id") Long id) {
-		return UserDto.fromEntity(userRepository.getUser(id));
+	public UserDto get(@NotNull @PathParam("id") Long id) {
+		
+		UserEntity user = userRepository.getUser(id);
+		
+		if (Objects.isNull(user)) {
+			throw new NotFoundException("could not find user for id:"+id);
+		}
+		System.out.println(user.getId());
+		return UserDto.fromEntity(user);
 	}
-	
+
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("list")
 	public List<UserDto> list() {
 		return userRepository.getUsers().stream().map(UserDto::fromEntity).collect(Collectors.toList());
 	}
-	
+
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("create")
-	public UserDto create(UserDto userDto) {
-		//check if id is unset
-		return UserDto.fromEntity(userRepository.create(UserEntity.fromDto(userDto)));
+	public Response create(UserDto userDto) {
+		// check if id is unset
+
+		if (!Objects.isNull(userDto.getId())) {
+			throw new BadRequestException("setting the id is not allowed in this endpoint. id is:" + userDto.getId());
+		}
+
+		UserEntity createdEntity = userRepository.create(UserEntity.fromDto(userDto));
+
+		if (Objects.isNull(createdEntity)) {
+			throw new InternalServerErrorException("could not create user.");
+		}
+
+		return Response.status(Response.Status.CREATED).entity(UserDto.fromEntity(createdEntity)).build();
+
 	}
-	
+
 	@PUT
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("update")
 	@Transactional
 	public UserDto update(UserDto userDto) {
-		//check if id is set
-		
+		// check if id is set
+
 		UserEntity entity = userRepository.getUser(userDto.getId());
+		if (Objects.isNull(entity)) {
+			throw new NotFoundException("could not find user for id:"+userDto.getId());
+		}
+		
 		entity.setFirstname(userDto.getFirstname());
 		entity.setLastname(userDto.getLastname());
 		entity.setBirthday(userDto.getBirthday());
@@ -61,7 +89,7 @@ public class UserResource {
 		entity.setPassword(userDto.getPassword());
 		return UserDto.fromEntity(userRepository.update(entity));
 	}
-	
+
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("search")

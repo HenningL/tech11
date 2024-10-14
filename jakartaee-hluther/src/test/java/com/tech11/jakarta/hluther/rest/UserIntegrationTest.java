@@ -12,6 +12,7 @@ import com.tech11.jakarta.hluther.dto.UserDto;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 public class UserIntegrationTest {
 
@@ -22,7 +23,7 @@ public class UserIntegrationTest {
 		String url = LOCAL_SERVER_BASE_URL + "/user/list";
 		Response response=RestAssured.get(url);		
 		System.out.println(response.asPrettyString());
-		Assert.assertEquals(response.getStatusCode(),200);
+		Assert.assertEquals(response.getStatusCode(),Status.OK.getStatusCode());
 		List<UserDto> responseDtos = GsonUtil.fromJson(response.asPrettyString(),  new TypeToken<List<UserDto>>() {
 		}.getType());
 		Assert.assertTrue(responseDtos.size()>0);
@@ -34,9 +35,17 @@ public class UserIntegrationTest {
 		String url = LOCAL_SERVER_BASE_URL + "/user/1";
 		Response response=RestAssured.get(url);		
 		System.out.println(response.asPrettyString());
-		Assert.assertEquals(response.getStatusCode(),200);
+		Assert.assertEquals(response.getStatusCode(),Status.OK.getStatusCode());
 		UserDto responseDto = GsonUtil.fromJson(response.asPrettyString(),  UserDto.class);
 		Assert.assertTrue(responseDto.getFirstname().equals("Henning"));
+	}
+	
+	@Test
+	public void getUserBadIdTest() {
+		String url = LOCAL_SERVER_BASE_URL + "/user/1000000000";
+		Response response=RestAssured.get(url);		
+		System.out.println(response.asPrettyString());
+		Assert.assertEquals(response.getStatusCode(),Status.NOT_FOUND.getStatusCode());
 	}
 	
 	@Test
@@ -45,10 +54,20 @@ public class UserIntegrationTest {
 		UserDto newUser = new UserDto(null, "Peter", "Lustig", "plustig@gmail.com", LocalDate.parse("1960-06-07"), "password");
 		Response response=RestAssured.given().body(GsonUtil.toJson(newUser)).contentType(ContentType.JSON).post(url);		
 		System.out.println(response.asPrettyString());
-		Assert.assertEquals(response.getStatusCode(),200);
+		Assert.assertEquals(response.getStatusCode(),Status.CREATED.getStatusCode());
 		
 		UserDto responseDto = GsonUtil.fromJson(response.asPrettyString(),  UserDto.class);
 		Assert.assertTrue(responseDto.getFirstname().equals("Peter"));
+	}
+	
+	@Test
+	public void createUserBadIdTest() {
+		String url = LOCAL_SERVER_BASE_URL + "/user/create";
+		UserDto newUser = new UserDto(1l, "Peter", "Lustig", "plustig@gmail.com", LocalDate.parse("1960-06-07"), "password");
+		Response response=RestAssured.given().body(GsonUtil.toJson(newUser)).contentType(ContentType.JSON).post(url);		
+		System.out.println(response.statusLine());
+		Assert.assertEquals(response.getStatusCode(),Status.BAD_REQUEST.getStatusCode());
+
 	}
 	
 	@Test
@@ -58,7 +77,7 @@ public class UserIntegrationTest {
 		UserDto newUser = new UserDto(null, "Update", "User", "uuser@gmail.com", LocalDate.parse("1990-06-07"), "password");
 		Response createResponse=RestAssured.given().body(GsonUtil.toJson(newUser)).contentType(ContentType.JSON).post(createUrl);		
 		System.out.println(createResponse.asPrettyString());
-		Assert.assertEquals(createResponse.getStatusCode(),200);
+		Assert.assertEquals(createResponse.getStatusCode(),Status.CREATED.getStatusCode());
 		
 		UserDto createResponseDto = GsonUtil.fromJson(createResponse.asPrettyString(),  UserDto.class);
 		Assert.assertEquals(createResponseDto.getFirstname(),"Update");
