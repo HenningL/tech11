@@ -24,6 +24,9 @@ public class UserDto {
 	@NotNull
 	private LocalDate birthday;
 
+	/*
+	 * password needs to be encoded and salted to not be restorable and populated to public out of the realm. for now it's simply done for easy impl. passwords should never be able to be reconstructed from db-data.
+	 */
 	@NotNull
 	private String password;
 
