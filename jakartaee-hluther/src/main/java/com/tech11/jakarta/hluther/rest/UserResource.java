@@ -72,21 +72,10 @@ public class UserResource {
 	@PUT
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("update")
-	@Transactional
 	public UserDto update(UserDto userDto) {
 		// check if id is set
 
-		UserEntity entity = userRepository.getUser(userDto.getId());
-		if (Objects.isNull(entity)) {
-			throw new NotFoundException("could not find user for id:"+userDto.getId());
-		}
-		
-		entity.setFirstname(userDto.getFirstname());
-		entity.setLastname(userDto.getLastname());
-		entity.setBirthday(userDto.getBirthday());
-		entity.setEmail(userDto.getEmail());
-		entity.setPassword(userDto.getPassword());
-		return UserDto.fromEntity(userRepository.update(entity));
+		return UserDto.fromEntity(userRepository.update(UserEntity.fromDto(userDto)));
 	}
 
 	@GET

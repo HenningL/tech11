@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 
 @Entity(name = "USER")
 @Table(name = "USERS")
@@ -29,6 +30,9 @@ public class UserEntity {
 	private LocalDate birthday;
 	
 	private String password;
+	
+	@Version
+	private int version;
 	
 	public String getFirstname() {
 		return firstname;
