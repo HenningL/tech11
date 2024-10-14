@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import com.tech11.jakarta.hluther.entity.UserEntity;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 public class UserDto {
@@ -13,12 +14,17 @@ public class UserDto {
 	@NotNull
 	private String firstname;
 
+	@NotNull
 	private String lastname;
 
+	@NotNull
+	@Email
 	private String email;
 
+	@NotNull
 	private LocalDate birthday;
 
+	@NotNull
 	private String password;
 
 	public UserDto() {
