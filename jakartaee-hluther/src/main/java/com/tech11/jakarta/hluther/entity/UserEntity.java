@@ -1,5 +1,8 @@
 package com.tech11.jakarta.hluther.entity;
 
+/**
+ * not much validation here since the facade before already validates. but can be done in case new features needs to be implemented and people forget to claim proper validation.
+ */
 import java.time.LocalDate;
 
 import com.tech11.jakarta.hluther.dto.UserDto;
