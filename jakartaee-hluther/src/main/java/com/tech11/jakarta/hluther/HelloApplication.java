@@ -1,4 +1,4 @@
-package com.tech11.jakarta;
+package com.tech11.jakarta.hluther;
 
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
