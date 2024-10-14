@@ -42,8 +42,6 @@ public class UserRepository {
 			throw new NotFoundException("could not find user for id:" + updateEntity.getId());
 		}
 
-		em.lock(existingEntity, LockModeType.OPTIMISTIC);
-
 		existingEntity.setFirstname(updateEntity.getFirstname());
 		existingEntity.setLastname(updateEntity.getLastname());
 		existingEntity.setBirthday(updateEntity.getBirthday());
