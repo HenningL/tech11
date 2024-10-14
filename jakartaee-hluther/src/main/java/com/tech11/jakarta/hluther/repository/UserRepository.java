@@ -33,23 +33,23 @@ public class UserRepository {
 		em.refresh(entity);
 		return entity;
 	}
-	
+
 	@Transactional
 	public UserEntity update(UserEntity updateEntity) {
-		
+
 		UserEntity existingEntity = getUser(updateEntity.getId());
 		if (Objects.isNull(existingEntity)) {
-			throw new NotFoundException("could not find user for id:"+updateEntity.getId());
+			throw new NotFoundException("could not find user for id:" + updateEntity.getId());
 		}
-		
+
 		em.lock(existingEntity, LockModeType.OPTIMISTIC);
-		
+
 		existingEntity.setFirstname(updateEntity.getFirstname());
 		existingEntity.setLastname(updateEntity.getLastname());
 		existingEntity.setBirthday(updateEntity.getBirthday());
 		existingEntity.setEmail(updateEntity.getEmail());
 		existingEntity.setPassword(updateEntity.getPassword());
-		
+
 		em.merge(existingEntity);
 		em.flush();
 		em.refresh(existingEntity, LockModeType.OPTIMISTIC);

@@ -14,26 +14,26 @@ import jakarta.persistence.Version;
 
 @Entity(name = "USER")
 @Table(name = "USERS")
-@NamedQuery(name="getalluser", query="select u from USER u")
+@NamedQuery(name = "getalluser", query = "select u from USER u")
 public class UserEntity {
-	
+
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	private String firstname;
-	
+
 	private String lastname;
-	
+
 	private String email;
-	
+
 	private LocalDate birthday;
-	
+
 	private String password;
-	
+
 	@Version
 	private int version;
-	
+
 	public String getFirstname() {
 		return firstname;
 	}
@@ -89,5 +89,4 @@ public class UserEntity {
 		return entity;
 	}
 
-	
 }

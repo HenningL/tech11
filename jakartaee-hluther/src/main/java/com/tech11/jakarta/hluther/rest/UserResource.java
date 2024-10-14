@@ -9,7 +9,6 @@ import com.tech11.jakarta.hluther.entity.UserEntity;
 import com.tech11.jakarta.hluther.repository.UserRepository;
 
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.GET;
@@ -33,11 +32,11 @@ public class UserResource {
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("{id}")
 	public UserDto get(@NotNull @PathParam("id") Long id) {
-		
+
 		UserEntity user = userRepository.getUser(id);
-		
+
 		if (Objects.isNull(user)) {
-			throw new NotFoundException("could not find user for id:"+id);
+			throw new NotFoundException("could not find user for id:" + id);
 		}
 		return UserDto.fromEntity(user);
 	}
@@ -82,6 +81,7 @@ public class UserResource {
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("search")
 	public List<UserDto> search(UserDto searchCrteria) {
-		return userRepository.search(UserEntity.fromDto(searchCrteria)).stream().map(UserDto::fromEntity).collect(Collectors.toList());
+		return userRepository.search(UserEntity.fromDto(searchCrteria)).stream().map(UserDto::fromEntity)
+				.collect(Collectors.toList());
 	}
 }
