@@ -4,10 +4,13 @@ import java.time.LocalDate;
 
 import com.tech11.jakarta.hluther.entity.UserEntity;
 
+import jakarta.validation.constraints.NotNull;
+
 public class UserDto {
 
 	private Long id;
 
+	@NotNull
 	private String firstname;
 
 	private String lastname;

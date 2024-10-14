@@ -9,6 +9,7 @@ import com.tech11.jakarta.hluther.entity.UserEntity;
 import com.tech11.jakarta.hluther.repository.UserRepository;
 
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.GET;
@@ -51,7 +52,7 @@ public class UserResource {
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("create")
-	public Response create(UserDto userDto) {
+	public Response create(@Valid @NotNull UserDto userDto) {
 		// check if id is unset
 
 		if (!Objects.isNull(userDto.getId())) {

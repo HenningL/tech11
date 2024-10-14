@@ -71,6 +71,16 @@ public class UserIntegrationTest {
 	}
 	
 	@Test
+	public void createUserMissingMandatoryAttributes() {
+		String url = LOCAL_SERVER_BASE_URL + "/user/create";
+		UserDto newUser = new UserDto(null, null, "Lustig", "plustig@gmail.com", LocalDate.parse("1960-06-07"), "password");
+		Response response=RestAssured.given().body(GsonUtil.toJson(newUser)).contentType(ContentType.JSON).post(url);		
+		System.out.println(response.statusLine());
+		Assert.assertEquals(response.getStatusCode(),Status.BAD_REQUEST.getStatusCode());
+
+	}
+	
+	@Test
 	public void updateUserTest() {
 		//first create fresh one
 		String createUrl = LOCAL_SERVER_BASE_URL + "/user/create";
