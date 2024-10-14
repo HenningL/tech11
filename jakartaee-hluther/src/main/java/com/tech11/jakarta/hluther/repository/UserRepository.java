@@ -1,8 +1,8 @@
 package com.tech11.jakarta.hluther.repository;
 
+import java.util.Arrays;
 import java.util.List;
 
-import com.tech11.jakarta.hluther.dto.UserDto;
 import com.tech11.jakarta.hluther.entity.UserEntity;
 
 import jakarta.ejb.Stateless;
@@ -37,8 +37,8 @@ public class UserRepository {
 		return entity;
 	}
 
-	public List<UserDto> search(UserDto searchCrteria) {
-		return null;
+	public List<UserEntity> search(UserEntity searchCrteria) {
+		return Arrays.asList(searchCrteria);
 	}
 
 }

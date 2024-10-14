@@ -39,7 +39,6 @@ public class UserResource {
 		if (Objects.isNull(user)) {
 			throw new NotFoundException("could not find user for id:"+id);
 		}
-		System.out.println(user.getId());
 		return UserDto.fromEntity(user);
 	}
 
@@ -94,6 +93,6 @@ public class UserResource {
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("search")
 	public List<UserDto> search(UserDto searchCrteria) {
-		return userRepository.search(searchCrteria);
+		return userRepository.search(UserEntity.fromDto(searchCrteria)).stream().map(UserDto::fromEntity).collect(Collectors.toList());
 	}
 }
