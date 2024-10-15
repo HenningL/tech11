@@ -72,9 +72,7 @@ public class UserResource {
 	@PUT
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("update")
-	public UserDto update(UserDto userDto) {
-		// check if id is set
-
+	public UserDto update(@Valid @NotNull UserDto userDto) {
 		return UserDto.fromEntity(userRepository.update(UserEntity.fromDto(userDto)));
 	}
 
