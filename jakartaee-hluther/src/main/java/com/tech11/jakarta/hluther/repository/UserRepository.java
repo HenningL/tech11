@@ -54,8 +54,8 @@ public class UserRepository {
 		return existingEntity;
 	}
 
-	public List<UserEntity> search(UserEntity searchCrteria) {
-		return Arrays.asList(searchCrteria);
+	public List<UserEntity> search(UserEntity searchCriteria) {
+		return Arrays.asList(searchCriteria);
 	}
 
 }
