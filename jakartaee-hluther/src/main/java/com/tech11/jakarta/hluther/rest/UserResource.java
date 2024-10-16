@@ -79,8 +79,8 @@ public class UserResource {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("search")
-	public List<UserDto> search(UserDto searchCrteria) {
-		return userRepository.search(UserEntity.fromDto(searchCrteria)).stream().map(UserDto::fromEntity)
+	public List<UserDto> search(UserDto searchCriteria) {
+		return userRepository.search(UserEntity.fromDto(searchCriteria)).stream().map(UserDto::fromEntity)
 				.collect(Collectors.toList());
 	}
 }
